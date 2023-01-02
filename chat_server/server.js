@@ -13,9 +13,15 @@ app.get('/', function(req, res) {
     res.sendFile('Hellow Chating App Server');
 });
 
+
+// const userList = []
+
 //connection event handler
 io.on('connection' , function(socket) {
+
+    // let userId = ''
     console.log('Connect from Client: '+socket)
+
 
     socket.on('chat', function(data){
         console.log('message from Client: '+data.message)
