@@ -25,6 +25,7 @@ io.on('connection' , function(socket) {
         };
 
         // 클라이언트에게 메시지를 전송한다
+        // JSON 으로 객체정보와 메시지를 교환해야 한다. 
         socket.broadcast.emit('chat', rtnMessage);
     });
 
