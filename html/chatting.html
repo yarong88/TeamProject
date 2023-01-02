@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>채팅창</title>
+    <style>
+      body {
+        margin: 0;
+        padding-bottom: 3rem;
+      }
+      #form {
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 4px;
+        position: fixed;
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        display: flex;
+        height: 45px;
+        box-sizing: border-box;
+        backdrop-filter: blur(10px);
+      }
+      #input {
+        border: none;
+        padding: 0px 16px;
+        flex-grow: 1;
+        border-radius: 32px;
+        margin: 4px;
+      }
+      #input:focus {
+        outline: none;
+      }
+      #form button {
+        background-color: #333;
+        border: none;
+        padding: 0.1em;
+        margin: 4px;
+        border-radius: 5px;
+        outline: none;
+        color: #fff;
+      }
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      #messages > li {
+        padding: 8px 16px;
+      }
+      #messages > li:nth-child(odd) {
+        background-color: #efefef;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dummy-name"></div>
+    <ul id="messages">
+      <form action="" id="form">
+        <input id="input" name="my-id" autocomplete="off" />
+        <button>전송</button>
+      </form>
+    </ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const chat_id = localStorage.getItem('chat_id')
+
+      let socket = io()
+      let message = document.getElementById('messages')
+      let form = document.getElementById('form')
+      let input = document.getElementById('input')
+
+      // let chat_box = []
+      // let chat_down = localStorage.getItem('chat_box')
+      // chat_box = JSON.parse(chat_down)
+
+      // for (let i = 0; i < chat_box.length; i++) {
+      //   let talk = document.createElement('li')
+      //   talk.textContent = chat_box[i]
+      //   message.appendChild(talk)
+      // }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        if (input.value) {
+          socket.emit('chat message', '-' + chat_id + '/' + input.value)
+          input.value = ''
+        }
+      })
+
+      socket.on('chat message', (msg) => {
+        // chat_box.push(msg)
+        // const chat_upload = JSON.stringify(chat_box)
+        // localStorage.setItem('chat_box', chat_upload)
+        let talk = document.createElement('li')
+        talk.textContent = msg
+        message.appendChild(talk)
+        window.scrollTo(0, document.body.scrollHeight)
+      })
+    </script>
+  </body>
+</html>
